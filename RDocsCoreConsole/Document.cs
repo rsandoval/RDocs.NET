@@ -7,19 +7,14 @@ namespace RDocsCoreConsole
 {
     public class Document
     {
+        private string _contents = "";
+
         [LoadColumn(0)]
         public string ID { get; set; }
         [LoadColumn(1)]
-        public string Contents { get; set; }
+        public string Contents { get { return _contents; } set { _contents = value.ToUpper(); } }
         [LoadColumn(2)]
-        public int Suptertype { get; set; }
-        [LoadColumn(3)]
-        public string Filename { get; set; }
-        [LoadColumn(4)]
-        public string CalculatedSupertype { get; set; }
-
         public string Type { get; set; }
-
     }
 
     public class DocumentType
