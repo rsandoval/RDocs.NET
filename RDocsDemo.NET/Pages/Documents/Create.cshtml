@@ -1,0 +1,64 @@
+﻿@page
+@model RDocsDemo.NET.Pages.Documents.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div id="main" class="wrapper style1">
+    <div class="container">
+
+        <h2>Create</h2>
+
+        <h4>Document</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Document.Filename" class="control-label"></label>
+                        <input asp-for="Document.Filename" class="form-control" />
+                        <span asp-validation-for="Document.Filename" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Document.Contents" class="control-label"></label>
+                        <input asp-for="Document.Contents" class="form-control" />
+                        <span asp-validation-for="Document.Contents" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Document.LoadDate" class="control-label"></label>
+                        <input asp-for="Document.LoadDate" class="form-control" />
+                        <span asp-validation-for="Document.LoadDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Document.Type" class="control-label"></label>
+                        <input asp-for="Document.Type" class="form-control" />
+                        <span asp-validation-for="Document.Type" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Document.IssueDate" class="control-label"></label>
+                        <input asp-for="Document.IssueDate" class="form-control" />
+                        <span asp-validation-for="Document.IssueDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Document.NamedParts" class="control-label"></label>
+                        <input asp-for="Document.NamedParts" class="form-control" />
+                        <span asp-validation-for="Document.NamedParts" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <a asp-page="Index">Back to List</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

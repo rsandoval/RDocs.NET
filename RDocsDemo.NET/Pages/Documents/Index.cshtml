@@ -1,0 +1,66 @@
+﻿@page
+@model RDocsDemo.NET.Pages.Documents.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Document[0].Filename)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Document[0].Contents)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Document[0].LoadDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Document[0].Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Document[0].IssueDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Document[0].NamedParts)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Document) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Filename)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contents)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoadDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IssueDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NamedParts)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

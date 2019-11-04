@@ -1,0 +1,56 @@
+﻿@page
+@model DemoModel
+@{
+
+    ViewData["Title"] = "R:Docs | Demostración";
+}
+
+
+<div id="main" class="wrapper style1">
+    <div class="container">
+
+
+        <!-- Main -->
+        <header class="major">
+            <h2>Demostración de R:Docs</h2>
+            <p>Tecnología Cognitiva Avanzada para Entendimiento de Contenido Documental</p>
+        </header>
+        <div class="row 150%">
+            <div class="4u 12u$(medium)">
+
+                <!-- Sidebar -->
+                <section id="sidebar">
+                    <section>
+                        <h3>Documento único</h3>
+                        <form enctype="multipart/form-data" method="post">
+                            <dl>
+                                <!--
+    <dt>
+        <label asp-for="FileUpload.FormFile"></label>
+    </dt>-->
+                                <dd>
+                                    <input type="file" asp-for="FileForUpload" />
+                                </dd>
+                            </dl>
+                            <input asp-page-handler="Upload" class="btn" type="submit" value="Subir" />
+                        </form>
+                    </section>
+                </section>
+
+            </div>
+            <div class="8u$ 12u$(medium) important(medium)">
+
+                <!-- Content -->
+                <section id="content">
+                    <h3>@Model.ResultMessage</h3>
+                    <p>En esta demostración Ud. puede subir un documento en formato docx, txt, o pdf y dejar que R:Docs lo analice.</p>
+                    <p>Algunas restricciones de estas capacidades.</p>
+                    <ul>
+                        <li>Por ahora, sólo documentos de texto legible - no imágenes</li>
+                        <li>Sólo puede intentar con 10 documentos por día</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
