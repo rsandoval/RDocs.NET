@@ -22,6 +22,10 @@ namespace RDocsDemo.NET.Pages
 
         public IActionResult OnGet()
         {
+            _resultMessage = "En esta demostración Ud. puede subir un documento en formato docx, txt, o pdf y dejar que R:Docs lo analice.</p>"
+                + "<p>Algunas restricciones de estas capacidades.</p>"
+                + "<ul><li>Por ahora, sólo documentos de texto legible - no imágenes</li><li>Sólo puede intentar con 10 documentos por día </li></ul>";
+
             return Page();
         }
 
@@ -40,7 +44,6 @@ namespace RDocsDemo.NET.Pages
 
         [BindProperty]
         public IFormFile FileForUpload { get; set; }
-        public string DocumentType { get; set; }
         public string ResultMessage { get { return _resultMessage; } set { _resultMessage = value; } }
 
         public async Task OnPostAsync()
@@ -56,13 +59,11 @@ namespace RDocsDemo.NET.Pages
                     contents.AppendLine(reader.ReadLine());
             }
 
-            ContentCharacterizer characterizer = new ContentCharacterizer();
+            ContentCharacterizer characterizer = ContentCharacterizer.GetInstance();
 
             document.Type = characterizer.GetDocumentType(contents.ToString());
 
-            DocumentType = document.Type;
-
-            ResultMessage = "El documento es de tipo " + characterizer.GetTypeDescription(document.Type);
+            ResultMessage = characterizer.GetDocumentDescription(document.Filename, contents.ToString());
 
         }
 
