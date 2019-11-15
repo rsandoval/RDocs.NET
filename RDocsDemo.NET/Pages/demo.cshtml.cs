@@ -1,13 +1,19 @@
 using System;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
+
+using DocumentFormat.OpenXml.Packaging;
+
 
 using RDocsDemo.NET.Data;
 using RDocsDemo.NET.Models;
@@ -22,9 +28,11 @@ namespace RDocsDemo.NET.Pages
 
         public IActionResult OnGet()
         {
-            _resultMessage = "En esta demostración Ud. puede subir un documento en formato docx, txt, o pdf y dejar que R:Docs lo analice.</p>"
-                + "<p>Algunas restricciones de estas capacidades.</p>"
-                + "<ul><li>Por ahora, sólo documentos de texto legible - no imágenes</li><li>Sólo puede intentar con 10 documentos por día </li></ul>";
+            _resultMessage =
+                "En esta demostración Ud. puede subir un documento en formato docx, txt, o pdf y dejar que R:Docs lo analice.\n\r"
+                + "Algunas restricciones de estas capacidades.\n\r"
+                + "- Por ahora, sólo documentos de texto legible - no imágenes\n\r"
+                + "- Sólo puede intentar con 10 documentos por día.";
 
             return Page();
         }
@@ -45,40 +53,23 @@ namespace RDocsDemo.NET.Pages
         [BindProperty]
         public IFormFile FileForUpload { get; set; }
         public string ResultMessage { get { return _resultMessage; } set { _resultMessage = value; } }
+        public string Filename { get; set; }
+        public string TypeDescription { get; set; }
+        public string DateDescription { get; set; }
+        public string NamesDescription { get; set; }
+        public string NotaryDescription { get; set; }
 
+        //public async Task OnPostAsync()
         public async Task OnPostAsync()
         {
-            Document document = new Document();
-            document.Filename = FileForUpload.FileName;
-            document.LoadDate = DateTime.Today;
+            Document document = new Document(FileForUpload, DateTime.Today);
 
-            var contents = new StringBuilder();
-            using (var reader = new StreamReader(FileForUpload.OpenReadStream()))
-            {
-                while (reader.Peek() >= 0)
-                    contents.AppendLine(reader.ReadLine());
-            }
-
-            ContentCharacterizer characterizer = ContentCharacterizer.GetInstance();
-
-            document.Type = characterizer.GetDocumentType(contents.ToString());
-
-            ResultMessage = characterizer.GetDocumentDescription(document.Filename, contents.ToString());
-
+            ResultMessage = "Documento con las siguientes características encontradas";
+            Filename = FileForUpload.FileName;
+            TypeDescription = document.TypeDescription;
+            DateDescription = document.IssueDate.ToString("dd MMM yyyy");
+            NamesDescription = document.NamedParts;
+            NotaryDescription = document.NotaryName;
         }
-
-
-        /*        public async Task<IActionResult> OnPostAsync()
-                {
-                    if (!ModelState.IsValid)
-                    {
-                        return Page();
-                    }
-
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToPage("./Index");
-                }
-                */
     }
 }

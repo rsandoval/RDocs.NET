@@ -18,6 +18,7 @@ namespace RDocsDemo.NET.Models
         private MLContext _mlContext;
         private PredictionEngine<SimpleDocument, TypePrediction> _predEngine;
         private List<Tuple<string, string>> _documentTypes = new List<Tuple<string, string>>();
+        private Dictionary<string, int> _months = new Dictionary<string, int>();
 
         private ContentCharacterizer()
         {
@@ -47,6 +48,7 @@ namespace RDocsDemo.NET.Models
                 string[] tokens = line.Split(separators);
                 types.Add(new Tuple<string, string>(tokens[0], tokens[1]));
             }
+            reader.Close();
 
             return types;
         }
@@ -62,27 +64,49 @@ namespace RDocsDemo.NET.Models
 
         public DateTime GetIssuingDate(string contents)
         {
+            char[] separators = { ' ', '\t', '\n', '\r' };
+            string[] words = contents.Split(separators);
+
+
+
             return new DateTime(2019, 1, 1);
+        }
+
+        private bool IsNumeric(string token)
+        {
+            //string[] numbers = { "1", "2", 
+            return false;
         }
 
         public List<string> GetNames(string contents)
         {
-            List<string> foundNames = new List<string>();
+            string notaryName = GetNotary(contents);
+            NameRecognizer recognizer = NameRecognizer.GetInstance();
+            List<string> foundNames = recognizer.FindItems(contents);
 
-            foundNames.Add("RSOLVER SpA");
-            foundNames.Add("R. Sandoval U.");
+            foundNames.Remove(notaryName);
 
             return foundNames;
         }
+        public string GetNotary(string contents)
+        {
+            NotaryRecognizer recognizer = NotaryRecognizer.GetInstance();
+            List<string> foundNames = recognizer.FindItems(contents);
+
+            return (foundNames.Count > 0 ? foundNames[0] : "");
+        }
+
 
         public string GetConcatenatedNames(List<string> names)
         {
             string concatNames = "";
 
             foreach (string name in names)
-                concatNames += name + " ";
+                concatNames += name + ", ";
 
-            return concatNames.Trim();
+            int lastCommaIndex = concatNames.LastIndexOf(",");
+
+            return concatNames.Substring(0, lastCommaIndex).Trim();
         }
 
         public string GetTypeDescription(string typeID)
@@ -106,6 +130,52 @@ namespace RDocsDemo.NET.Models
                 + ", emitido el " + docDate + (!String.IsNullOrEmpty(docNames) ? " y menciona a " + docNames + "." : ".");
 
             return docCharacterization;
+        }
+
+        private void InitializeMonthWords()
+        {
+            _months = new Dictionary<string, int>();
+            _months.Add("enero", 1);
+            _months.Add("ene", 1);
+            _months.Add("january", 1);
+            _months.Add("jan", 1);
+            _months.Add("febrero", 2);
+            _months.Add("feb", 2);
+            _months.Add("february", 2);
+            _months.Add("marzo", 3);
+            _months.Add("mar", 3);
+            _months.Add("march", 3);
+            _months.Add("abril", 4);
+            _months.Add("abr", 4);
+            _months.Add("april", 4);
+            _months.Add("apr", 4);
+            _months.Add("mayo", 5);
+            _months.Add("may", 5);
+            _months.Add("junio", 6);
+            _months.Add("jun", 6);
+            _months.Add("june", 6);
+            _months.Add("julio", 7);
+            _months.Add("jul", 7);
+            _months.Add("july", 7);
+            _months.Add("agosto", 8);
+            _months.Add("ago", 8);
+            _months.Add("august", 8);
+            _months.Add("aug", 8);
+            _months.Add("septiembre", 9);
+            _months.Add("setiembre", 9);
+            _months.Add("sep", 9);
+            _months.Add("set", 9);
+            _months.Add("september", 9);
+            _months.Add("octubre", 10);
+            _months.Add("oct", 10);
+            _months.Add("october", 10);
+            _months.Add("noviembre", 11);
+            _months.Add("nov", 11);
+            _months.Add("november", 11);
+            _months.Add("diciembre", 12);
+            _months.Add("dic", 12);
+            _months.Add("december", 12);
+            _months.Add("dec", 12);
         }
     }
 }
